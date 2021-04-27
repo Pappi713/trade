@@ -36,6 +36,9 @@ public class Transaction {
 
   private Integer amount;
 
+  @Column(name = "transaction_type")
+  private String transactionType;
+
   @ManyToOne
   @JoinColumn(name = "user_name", nullable = false)
   private User user;

@@ -12,5 +12,10 @@ public class ApiExceptionHandler {
     return ResponseEntity.status(422).build();
   }
 
+  @ExceptionHandler (value = UserNotFoundException.class)
+  public ResponseEntity handleUserNotFoundException() {
+    return ResponseEntity.status(422).build();
+  }
+
 
 }

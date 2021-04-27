@@ -27,9 +27,13 @@ public class User {
   private String password;
 
   private Double balance;
+  private Double cash;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<Transaction> transactions;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<OwnedStock> portfolio;
 
 
   public User(String username, String password, Double balance) {
