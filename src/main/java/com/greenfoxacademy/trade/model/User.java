@@ -26,10 +26,15 @@ public class User {
   @JsonIgnore
   private String password;
 
-  private Integer balance;
+  private Double balance;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<Transaction> transactions;
 
 
+  public User(String username, String password, Double balance) {
+    this.username = username;
+    this.password = password;
+    this.balance = balance;
+  }
 }
