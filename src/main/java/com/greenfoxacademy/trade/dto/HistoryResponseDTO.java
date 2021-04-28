@@ -14,12 +14,12 @@ public class HistoryResponseDTO {
   private String date;
   private Double stockPrice;
   private Integer amount;
-  private String transactionValue;
+  private Double transactionValue;
   private String transactionType;
   private Double profit;
 
   public HistoryResponseDTO(String type, String date, Double stockPrice, Integer amount,
-                            String transactionValue, String transactionType,Double profit ) {
+                            Double transactionValue, String transactionType,Double profit ) {
     this.type = type;
     this.date = date;
     this.stockPrice = stockPrice;
