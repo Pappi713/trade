@@ -8,6 +8,7 @@ import com.greenfoxacademy.trade.exception.UserNotFoundException;
 import com.greenfoxacademy.trade.security.JwtUtil;
 import com.greenfoxacademy.trade.service.MyUserDetailsService;
 import com.greenfoxacademy.trade.service.OwnedStockService;
+import com.greenfoxacademy.trade.service.TransactionService;
 import com.greenfoxacademy.trade.service.UserService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,19 @@ public class UserController {
   private final MyUserDetailsService myUserDetailsService;
   private final JwtUtil jwtUtil;
   private OwnedStockService ownedStockService;
+  private TransactionService transactionService;
 
   @Autowired
   public UserController(UserService userService,
                         AuthenticationManager authenticationManager,
-                        MyUserDetailsService myUserDetailsService, JwtUtil jwtUtil, OwnedStockService ownedStockService) {
+                        MyUserDetailsService myUserDetailsService, JwtUtil jwtUtil,
+                        OwnedStockService ownedStockService, TransactionService transactionService) {
     this.userService = userService;
     this.authenticationManager = authenticationManager;
     this.myUserDetailsService = myUserDetailsService;
     this.jwtUtil = jwtUtil;
     this.ownedStockService =ownedStockService;
+    this.transactionService =transactionService;
   }
 
 
@@ -74,5 +78,11 @@ public class UserController {
   @ResponseBody
   public ResponseEntity<?> getPortfolio(Principal principal) throws UserNotFoundException {
     return ResponseEntity.ok(ownedStockService.ownedStocks(principal));
+  }
+
+  @GetMapping("/history")
+  @ResponseBody
+  public ResponseEntity<?> getHistory(Principal principal) throws UserNotFoundException {
+    return ResponseEntity.ok(transactionService.transactionHistory(principal));
   }
 }
