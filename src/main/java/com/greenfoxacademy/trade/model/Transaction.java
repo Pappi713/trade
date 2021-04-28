@@ -39,6 +39,8 @@ public class Transaction {
   @Column(name = "transaction_type")
   private String transactionType;
 
+  private Double profit=0.0;
+
   @ManyToOne
   @JoinColumn(name = "user_name", nullable = false)
   private User user;
