@@ -1,6 +1,7 @@
 package com.greenfoxacademy.trade.service;
 
 import com.greenfoxacademy.trade.dto.OwnedStockResponseDTO;
+import com.greenfoxacademy.trade.dto.PortfolioResponseDTO;
 import com.greenfoxacademy.trade.exception.UserNotFoundException;
 import com.greenfoxacademy.trade.model.User;
 import com.greenfoxacademy.trade.repository.OwnedStockRepository;
@@ -25,14 +26,15 @@ public class OwnedStockService {
     this.userRepository = userRepository;
   }
 
-  public List<OwnedStockResponseDTO> ownedStocks(Principal principal) throws UserNotFoundException {
+  public PortfolioResponseDTO ownedStocks(Principal principal) throws UserNotFoundException {
     Optional<User> optionalUser = userRepository.findById(principal.getName());
     if (!optionalUser.isPresent()) {
       throw new UserNotFoundException("Not a valid user");
     }
     User user = optionalUser.get();
-    return user.getPortfolio().stream().filter(i->i.getAmount()>0)
+    List<OwnedStockResponseDTO> ownedStockResponseDTOList = user.getPortfolio().stream().filter(i->i.getAmount()>0)
         .map(i -> new OwnedStockResponseDTO(i.getId(), i.getAmount(), i.getType(), i.getBuyInPrice()))
         .collect(Collectors.toList());
+    return new PortfolioResponseDTO(user.getBalance(), ownedStockResponseDTOList);
   }
 }

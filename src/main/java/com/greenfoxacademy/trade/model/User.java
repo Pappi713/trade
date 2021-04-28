@@ -27,7 +27,6 @@ public class User {
   private String password;
 
   private Double balance;
-  private Double cash;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<Transaction> transactions;
