@@ -26,6 +26,29 @@ public class Transaction {
 
   private String type;
 
+  public Transaction(String type, String date, Double stockPrice, Double transactionValue, Integer amount,
+                     String transactionType, User user) {
+    this.type = type;
+    this.date = date;
+    this.stockPrice = stockPrice;
+    this.transactionValue = transactionValue;
+    this.amount = amount;
+    this.transactionType = transactionType;
+    this.user = user;
+  }
+
+  public Transaction(String type, String date, Double stockPrice, Double transactionValue, Integer amount,
+                     String transactionType, Double profit, User user) {
+    this.type = type;
+    this.date = date;
+    this.stockPrice = stockPrice;
+    this.transactionValue = transactionValue;
+    this.amount = amount;
+    this.transactionType = transactionType;
+    this.profit = profit;
+    this.user = user;
+  }
+
   private String date;
 
   @Column(name = "stock_price")
@@ -33,6 +56,7 @@ public class Transaction {
 
   @Column(name = "transaction_value")
   private Double transactionValue;
+
 
   private Integer amount;
 

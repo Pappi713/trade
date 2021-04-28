@@ -3,6 +3,10 @@ package com.greenfoxacademy.trade.controller;
 import com.greenfoxacademy.trade.dto.LoginDTO;
 import com.greenfoxacademy.trade.dto.LoginResponseDTO;
 import com.greenfoxacademy.trade.dto.ResponseDTO;
+import com.greenfoxacademy.trade.dto.TransactionRequestDto;
+import com.greenfoxacademy.trade.exception.InsufficientFundsException;
+import com.greenfoxacademy.trade.exception.NoSuchStockException;
+import com.greenfoxacademy.trade.exception.PositionAlreadyClosedException;
 import com.greenfoxacademy.trade.exception.UserAlreadyExistsException;
 import com.greenfoxacademy.trade.exception.UserNotFoundException;
 import com.greenfoxacademy.trade.security.JwtUtil;
@@ -84,5 +88,12 @@ public class UserController {
   @ResponseBody
   public ResponseEntity<?> getHistory(Principal principal) throws UserNotFoundException {
     return ResponseEntity.ok(transactionService.transactionHistory(principal));
+  }
+
+  @PostMapping("/transaction")
+  @ResponseBody
+  public ResponseEntity<?> makeTransaction(@RequestBody TransactionRequestDto transactionDto, Principal principal)
+      throws UserNotFoundException, NoSuchStockException, InsufficientFundsException, PositionAlreadyClosedException {
+    return ResponseEntity.ok(transactionService.makeTransaction(transactionDto, principal.getName()));
   }
 }
