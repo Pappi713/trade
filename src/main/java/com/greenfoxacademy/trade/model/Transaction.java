@@ -32,7 +32,7 @@ public class Transaction {
   private Double stockPrice;
 
   @Column(name = "transaction_value")
-  private String transactionValue ;
+  private Double transactionValue;
 
   private Integer amount;
 
