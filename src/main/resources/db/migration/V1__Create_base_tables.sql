@@ -1,6 +1,6 @@
-drop table if exists user;
 drop table if exists transaction;
 drop table if exists owned_stock;
+drop table if exists user;
 
 create table user
 (
@@ -18,7 +18,8 @@ create table transaction
     transaction_type  varchar(255),
     transaction_value double,
     type              varchar(255),
-    user_name         varchar(255)
+    user_name         varchar(255),
+    profit            double
 );
 
 create table owned_stock

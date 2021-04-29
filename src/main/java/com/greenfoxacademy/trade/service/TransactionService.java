@@ -57,7 +57,7 @@ public class TransactionService {
       throw new UserNotFoundException("User not found with the following username: " + username);
     }
     User user = optionalUser.get();
-    if(requestDto.getOrder().equals("sell")){
+    if(requestDto.getOrder().equals("Sell")){
       return makeSellTransaction(requestDto, user);
     }
     return makeBuyTransaction(requestDto, user);
@@ -75,7 +75,7 @@ public class TransactionService {
         requestDto.getPrice(),
         transactionValue,
         requestDto.getAmount(),
-        "sell",
+        "Sell",
         transactionValue - requestDto.getAmount() * ownedStock.getBuyInPrice(),
         user);
     user.setBalance(newBalance);
@@ -93,7 +93,7 @@ public class TransactionService {
     Double transactionValue = requestDto.getAmount() * requestDto.getPrice();
     Double newBalance = user.getBalance() - transactionValue;
     Transaction transaction = new Transaction(requestDto.getType(), date, requestDto.getPrice(), transactionValue,
-        requestDto.getAmount(), "buy", user);
+        requestDto.getAmount(), "Buy", user);
     user.setBalance(newBalance);
     OwnedStock ownedStock = new OwnedStock(transaction.getType(), transaction.getAmount(), transaction.getStockPrice(), user);
     ownedStockRepository.save(ownedStock);
@@ -103,7 +103,7 @@ public class TransactionService {
   }
 
   public String getFormattedDate() {
-    String pattern = "yyyy-MM-dd hh:mm";
+    String pattern = "yyyy-MM-dd HH:mm";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
     return simpleDateFormat.format(new Date());
   }
