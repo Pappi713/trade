@@ -7,6 +7,7 @@ import com.greenfoxacademy.trade.exception.UserNotFoundException;
 import com.greenfoxacademy.trade.model.User;
 import com.greenfoxacademy.trade.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class UserService {
     if(existsByUsername(username)) {
       throw new UserAlreadyExistsException("The following username is already taken: " + username);
     }
-    return userRepository.save(new User(username, loginDTO.getPassword(), 0D));
+    return userRepository.save(new User(username, new BCryptPasswordEncoder().encode(loginDTO.getPassword()), 0D));
   }
 
   public LoginResponseDTO createLoginResponse(String username, String jwt) throws UserNotFoundException {

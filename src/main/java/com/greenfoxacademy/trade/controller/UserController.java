@@ -3,20 +3,31 @@ package com.greenfoxacademy.trade.controller;
 import com.greenfoxacademy.trade.dto.LoginDTO;
 import com.greenfoxacademy.trade.dto.LoginResponseDTO;
 import com.greenfoxacademy.trade.dto.ResponseDTO;
+import com.greenfoxacademy.trade.dto.TransactionRequestDto;
+import com.greenfoxacademy.trade.exception.InsufficientFundsException;
+import com.greenfoxacademy.trade.exception.NoSuchStockException;
+import com.greenfoxacademy.trade.exception.PositionAlreadyClosedException;
 import com.greenfoxacademy.trade.exception.UserAlreadyExistsException;
+import com.greenfoxacademy.trade.exception.UserNotFoundException;
 import com.greenfoxacademy.trade.security.JwtUtil;
 import com.greenfoxacademy.trade.service.MyUserDetailsService;
+import com.greenfoxacademy.trade.service.OwnedStockService;
+import com.greenfoxacademy.trade.service.TransactionService;
 import com.greenfoxacademy.trade.service.UserService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
 
 @RestController
 public class UserController {
@@ -25,15 +36,20 @@ public class UserController {
   private final AuthenticationManager authenticationManager;
   private final MyUserDetailsService myUserDetailsService;
   private final JwtUtil jwtUtil;
+  private OwnedStockService ownedStockService;
+  private TransactionService transactionService;
 
   @Autowired
   public UserController(UserService userService,
                         AuthenticationManager authenticationManager,
-                        MyUserDetailsService myUserDetailsService, JwtUtil jwtUtil) {
+                        MyUserDetailsService myUserDetailsService, JwtUtil jwtUtil,
+                        OwnedStockService ownedStockService, TransactionService transactionService) {
     this.userService = userService;
     this.authenticationManager = authenticationManager;
     this.myUserDetailsService = myUserDetailsService;
     this.jwtUtil = jwtUtil;
+    this.ownedStockService =ownedStockService;
+    this.transactionService =transactionService;
   }
 
 
@@ -60,5 +76,24 @@ public class UserController {
     final String jwt = jwtUtil.generateToken(userDetails);
     LoginResponseDTO response = userService.createLoginResponse(username, jwt);
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/portfolio")
+  @ResponseBody
+  public ResponseEntity<?> getPortfolio(Principal principal) throws UserNotFoundException {
+    return ResponseEntity.ok(ownedStockService.ownedStocks(principal));
+  }
+
+  @GetMapping("/history")
+  @ResponseBody
+  public ResponseEntity<?> getHistory(Principal principal) throws UserNotFoundException {
+    return ResponseEntity.ok(transactionService.transactionHistory(principal));
+  }
+
+  @PostMapping("/transaction")
+  @ResponseBody
+  public ResponseEntity<?> makeTransaction(@RequestBody TransactionRequestDto transactionDto, Principal principal)
+      throws UserNotFoundException, NoSuchStockException, InsufficientFundsException, PositionAlreadyClosedException {
+    return ResponseEntity.ok(transactionService.makeTransaction(transactionDto, principal.getName()));
   }
 }

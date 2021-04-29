@@ -26,15 +26,44 @@ public class Transaction {
 
   private String type;
 
+  public Transaction(String type, String date, Double stockPrice, Double transactionValue, Integer amount,
+                     String transactionType, User user) {
+    this.type = type;
+    this.date = date;
+    this.stockPrice = stockPrice;
+    this.transactionValue = transactionValue;
+    this.amount = amount;
+    this.transactionType = transactionType;
+    this.user = user;
+  }
+
+  public Transaction(String type, String date, Double stockPrice, Double transactionValue, Integer amount,
+                     String transactionType, Double profit, User user) {
+    this.type = type;
+    this.date = date;
+    this.stockPrice = stockPrice;
+    this.transactionValue = transactionValue;
+    this.amount = amount;
+    this.transactionType = transactionType;
+    this.profit = profit;
+    this.user = user;
+  }
+
   private String date;
 
   @Column(name = "stock_price")
   private Double stockPrice;
 
   @Column(name = "transaction_value")
-  private String transactionValue ;
+  private Double transactionValue;
+
 
   private Integer amount;
+
+  @Column(name = "transaction_type")
+  private String transactionType;
+
+  private Double profit=0.0;
 
   @ManyToOne
   @JoinColumn(name = "user_name", nullable = false)
