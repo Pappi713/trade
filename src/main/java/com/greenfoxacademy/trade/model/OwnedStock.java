@@ -33,4 +33,11 @@ public class OwnedStock {
   @ManyToOne
   @JoinColumn(name = "user_name", nullable = false)
   private User user;
+
+  public OwnedStock(String type, Integer amount, Double buyInPrice, User user) {
+    this.type = type;
+    this.amount = amount;
+    this.buyInPrice = buyInPrice;
+    this.user = user;
+  }
 }
